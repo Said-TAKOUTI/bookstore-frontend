@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrductCategoryMenuComponent } from './prduct-category-menu.component';
+import { PrductCategoryMenuComponent } from './product-category-menu.component';
 
 describe('PrductCategoryMenuComponent', () => {
   let component: PrductCategoryMenuComponent;
