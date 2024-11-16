@@ -21,13 +21,42 @@
 
         <!-- if products empty  -->
 
-        <div
-          *ngIf="products?.length == 0"
-          class="alert alert-warning col-md-12"
-          role="alert"
-        >
-          No products founds.
+        <div class="footer-pagination">
+          <div class="row">
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+              <div class="row align-items-center">
+                <!-- Pagination Section -->
+                <div class="col-md-9" style="text-align: center">
+                  <ngb-pagination
+                    [(page)]="thePageNumber"
+                    [pageSize]="thePageSize"
+                    [collectionSize]="theTotalElements"
+                    [maxSize]="5"
+                    [boundaryLinks]="true"
+                    (pageChange)="listProducts()"
+                  >
+                  </ngb-pagination>
+                </div>
+                <!-- Page Size Dropdown -->
+                <div class="col-md-3" style="text-align: right">
+                  <span class="mr-2">Page Size</span>
+                  <select
+                    #myPageSelect
+                    (change)="updatePageSize(myPageSelect.value)"
+                  >
+                    <option value="2" selected="true">2</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- end footer  -->
       </div>
     </div>
   </div>

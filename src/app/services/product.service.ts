@@ -13,9 +13,27 @@ export class ProductService {
   private categoryUrl = "http://localhost:8080/api/product-category"
   constructor(private httpClient: HttpClient) { }
 
+
+  getProductListPaginate(thePage: number,
+                         theSize: number,
+                         theCategoryId: number): Observable<GetResponseProducts> {
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`
+                       + `&page=${thePage}&size=${theSize}`;
+
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
+
+  SearchProductsPaginate(thePage: number,
+                         theSize: number,
+                         theKeyword: string): Observable<GetResponseProducts> {
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`
+                      + `&page=${thePage}&size=${theSize}`;
+
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
   getProductList(theCategoryId: number): Observable<Product[]> {
-    const searcheUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
-    return this.httpClient.get<GetResponseProducts>(searcheUrl).pipe(
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(
       map(response => response._embedded.products)
     );
   }
@@ -35,8 +53,8 @@ export class ProductService {
   }
 
   searchProducts(theKeyword: string): Observable<Product[]> {
-    const searcheUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
-    return this.httpClient.get<GetResponseProducts>(searcheUrl).pipe(
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(
       map(response => response._embedded.products)
     );
 
@@ -48,6 +66,12 @@ export class ProductService {
 interface GetResponseProducts {
   _embedded: {
     products: Product[];
+  },
+  page: {
+    size: number,
+    totalElements: number,
+    totalPages: number,
+    number: number
   }
 }
 
