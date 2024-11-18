@@ -4,6 +4,8 @@ import { ProductService } from '../../services/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { keyframes } from '@angular/animations';
 import { KeyedWrite } from '@angular/compiler';
+import { CartService } from '../../services/cart.service';
+import { CartItem } from '../../common/cart-item';
 
 @Component({
   selector: 'app-product-list',
@@ -12,6 +14,7 @@ import { KeyedWrite } from '@angular/compiler';
 })
 export class ProductListComponent implements OnInit {
 
+
   products: Product[] = [];
   currentCategoryId: number = 1;
   previousCategoryId: number = 1;
@@ -19,13 +22,15 @@ export class ProductListComponent implements OnInit {
 
   // new properties for pagination
   thePageNumber: number = 1;
-  thePageSize: number = 2;
+  thePageSize: number = 5;
   theTotalElements: number = 0;
 
   previousKeyWord: string="";
 
   constructor(private productService: ProductService,
-    private route: ActivatedRoute) { };
+              private cartService: CartService,
+              private route: ActivatedRoute
+              ) { };
 
   ngOnInit(): void {
 
@@ -106,4 +111,10 @@ export class ProductListComponent implements OnInit {
         this.theTotalElements = data.page.totalElements;
       }
     }
+
+    addToCart(theProduct: Product) {
+        console.log(`the product name = ${theProduct.name} , the product price = ${theProduct.unitPrice}`);
+        const theCartItem = new CartItem(theProduct);
+        this.cartService.addToCart(theCartItem);
+      }
 }

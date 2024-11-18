@@ -15,7 +15,7 @@
             <div class="price">
               {{ tempProduct.unitPrice | currency : "USD" }}
             </div>
-            <a href="#" class="primary-btn">Add to cart</a>
+            <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm">Add to cart</button>
           </div>
         </div>
 
@@ -45,8 +45,7 @@
                     #myPageSelect
                     (change)="updatePageSize(myPageSelect.value)"
                   >
-                    <option value="2" selected="true">2</option>
-                    <option value="5">5</option>
+                    <option value="5" selected="true">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="50">50</option>
