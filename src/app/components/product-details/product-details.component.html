@@ -1,16 +1,17 @@
 <div class="detail-section">
   <div class="container-fluid">
-    
-    <img src="{{product.imageUrl}}" class="detail-img">
+    <img src="{{ product.imageUrl }}" class="detail-img" />
 
-    <h3>{{product.name}}</h3>
+    <h3>{{ product.name }}</h3>
 
-    <div class="price">{{product.unitPrice | currency:'USD'}}</div>
-    <button (click)="addToCart(product)" class="btn btn-primary btn-sm">Add to cart</button>
+    <div class="price">{{ product.unitPrice | currency : "USD" }}</div>
+    <button (click)="addToCart(product)" class="btn btn-primary btn-sm">
+      Add to cart
+    </button>
 
-    <hr>
+    <hr />
     <h4>Description</h4>
-    <p>{{product.description}}</p>
+    <p>{{ product.description }}</p>
 
     <a routerLink="/products" class="mt-5">Back to Product List</a>
   </div>

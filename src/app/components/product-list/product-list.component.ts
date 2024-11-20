@@ -25,12 +25,12 @@ export class ProductListComponent implements OnInit {
   thePageSize: number = 5;
   theTotalElements: number = 0;
 
-  previousKeyWord: string="";
+  previousKeyWord: string = "";
 
   constructor(private productService: ProductService,
-              private cartService: CartService,
-              private route: ActivatedRoute
-              ) { };
+    private cartService: CartService,
+    private route: ActivatedRoute
+  ) { };
 
   ngOnInit(): void {
 
@@ -59,20 +59,21 @@ export class ProductListComponent implements OnInit {
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
 
 
-      // check if we have a different keyword than previous
-    
-      // set thePageNumber to 1 
-     // if we have a different keyword  than previous
+    // check if we have a different keyword than previous
 
-     if(this.previousKeyWord != theKeyword){
-        this.thePageNumber = 1;
-     }
+    // set thePageNumber to 1 
+    // if we have a different keyword  than previous
 
-     this.previousKeyWord = theKeyword;
+    if (this.previousKeyWord != theKeyword) {
+      this.thePageNumber = 1;
+    }
+
+    this.previousKeyWord = theKeyword;
 
     this.productService.SearchProductsPaginate(this.thePageNumber - 1,
-                                               this.thePageSize,       
-                                               theKeyword).subscribe(this.processResult());  }
+      this.thePageSize,
+      theKeyword).subscribe(this.processResult());
+  }
 
   handelListProducts() {
 
@@ -85,36 +86,36 @@ export class ProductListComponent implements OnInit {
     }
 
     // check if we have a different category than previous
-    
+
     // set thePageNumber back to 1 
     // if we have a different category id than previous
-    if(this.previousCategoryId != this.currentCategoryId){
+    if (this.previousCategoryId != this.currentCategoryId) {
       this.thePageNumber = 1;
     }
     this.previousCategoryId = this.currentCategoryId;
 
     this.productService.getProductListPaginate(this.thePageNumber - 1,
-                                       this.thePageSize,       
-                                       this.currentCategoryId).subscribe(this.processResult());
+      this.thePageSize,
+      this.currentCategoryId).subscribe(this.processResult());
   }
   updatePageSize(pageSize: string) {
     this.thePageSize = +pageSize;
     this.thePageNumber = 1;
     this.listProducts();
-    }
-  
-    processResult(){
-      return (data:any) => {
-        this.products = data._embedded.products;
-        this.thePageNumber = data.page.number + 1;
-        this.thePageSize = data.page.size;
-        this.theTotalElements = data.page.totalElements;
-      }
-    }
+  }
 
-    addToCart(theProduct: Product) {
-        console.log(`the product name = ${theProduct.name} , the product price = ${theProduct.unitPrice}`);
-        const theCartItem = new CartItem(theProduct);
-        this.cartService.addToCart(theCartItem);
-      }
+  processResult() {
+    return (data: any) => {
+      this.products = data._embedded.products;
+      this.thePageNumber = data.page.number + 1;
+      this.thePageSize = data.page.size;
+      this.theTotalElements = data.page.totalElements;
+    }
+  }
+
+  addToCart(theProduct: Product) {
+    console.log(`the product name = ${theProduct.name} , the product price = ${theProduct.unitPrice}`);
+    const theCartItem = new CartItem(theProduct);
+    this.cartService.addToCart(theCartItem);
+  }
 }
