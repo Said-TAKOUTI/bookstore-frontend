@@ -13,7 +13,7 @@ export class CartDetailsComponent implements OnInit {
 
   cartItems: CartItem[] = [];
   totalPrice: number = 0.00;
-  totaQuantity: number = 0;
+  totalQuantity: number = 0;
 
   constructor(private cartService: CartService) { }
 
@@ -33,11 +33,14 @@ export class CartDetailsComponent implements OnInit {
 
     //subscribe to the cart totalQuantity 
     this.cartService.totalQuantity.subscribe(
-      data => this.totaQuantity = data
+      data => this.totalQuantity = data
     );
 
     // compute cart total price quantity
     this.cartService.computeCartTotals();
+  }
+  getSubtotal(item: CartItem): number {
+    return item.quantity * item.unitPrice;
   }
 
   incrementQuantity(theCartItem: CartItem) {

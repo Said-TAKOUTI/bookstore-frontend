@@ -2,18 +2,18 @@
   <div class="section-content section-content-p30">
     <div class="container-fluid">
       <!-- Display the table if products in cart -->
-      <div *ngIf="cartItems.length > 0">
+      <div *ngIf="cartItems.length > 0; else emptyCart">
         <table class="table table-bordered">
           <tr>
             <th width="20%">Product Image</th>
-            <th width="50%">Product Image</th>
+            <th width="50%">Product Name</th>
             <th width="30%"></th>
           </tr>
           <tr *ngFor="let tempCartItem of cartItems">
             <td>
               <img
                 src="{{ tempCartItem.imageUrl }}"
-                class="img-responsive"
+                class="img-fluid"
                 width="150px"
               />
             </td>
@@ -24,7 +24,7 @@
             <td>
               <div class="items">
                 <label>Quantity:</label>
-                <div class="row no-gutters">
+                <div class="row no-gutters align-items-center">
                   <div class="col">
                     <button
                       (click)="incrementQuantity(tempCartItem)"
@@ -33,7 +33,7 @@
                       <i class="fa fa-plus"></i>
                     </button>
                   </div>
-                  <div class="col ml-4 mr-2">
+                  <div class="col mx-2">
                     {{ tempCartItem.quantity }}
                   </div>
                   <div class="col">
@@ -44,44 +44,42 @@
                       <i class="fa fa-minus"></i>
                     </button>
                   </div>
-                  <div class="col-8"></div>
                 </div>
               </div>
-              <div>
+              <div class="col">
                 <button
                   (click)="remove(tempCartItem)"
-                  class="btn btn-primary btn-sm mt-2"
+                  class="btn btn-danger btn-sm mt-2"
                 >
                   Remove
                 </button>
               </div>
               <p class="mt-2">
-                Subtotal:
-                {{
-                  tempCartItem.quantity * tempCartItem.unitPrice
-                    | currency : "USD"
-                }}
+                Subtotal: {{ getSubtotal(tempCartItem) | currency : "USD" }}
               </p>
             </td>
           </tr>
           <tr>
             <td colspan="2"></td>
             <td style="font-weight: bold">
-              <p>Total Quantity: {{ totaQuantity }}</p>
+              <p>Total Quantity: {{ totalQuantity }}</p>
               <p>Shipping: FREE</p>
               <p>Total Price: {{ totalPrice | currency : "USD" }}</p>
+              <div class="col">
+                <a routerLink="/checkout" class="btn btn-success btn-sm"
+                  >Checkout</a
+                >
+              </div>
             </td>
           </tr>
         </table>
       </div>
-      <!-- if cart is empty then display a message -->
-      <div
-        *ngIf="cartItems.length === 0"
-        class="alert alert-warning col-md-12"
-        role="alert"
-      >
-        Your Shipping cart is empty.
-      </div>
+      <!-- If cart is empty then display a message -->
+      <ng-template #emptyCart>
+        <div class="alert alert-warning col-md-12" role="alert">
+          Your shopping cart is empty.
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
