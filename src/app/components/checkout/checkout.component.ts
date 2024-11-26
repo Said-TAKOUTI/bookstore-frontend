@@ -9,6 +9,7 @@ import { FormService } from '../../services/form.service';
 import { Country } from '../../common/country';
 import { Province } from '../../common/province';
 import { CustomFormValidators } from '../../common/custom-form-validators';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-checkout',
@@ -32,7 +33,8 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private formService: FormService
+    private formService: FormService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -131,6 +133,8 @@ export class CheckoutComponent implements OnInit {
 
     //fetch all countries
     this.handleCountries();
+
+    this.reviewCartDetails();
   }
 
   // Getters
@@ -273,6 +277,15 @@ export class CheckoutComponent implements OnInit {
       //select first item by default
       formGroup?.get('province')?.setValue(data[0]);
     });
+  }
+  reviewCartDetails() {
+
+    this.cartService.totalQuantity.subscribe(
+      totalQuantity => this.totalQuantity = totalQuantity
+    );
+    this.cartService.totalPrice.subscribe(
+      totalPrice => this.totalPrice = totalPrice
+    );
   }
   onSubmit() {
     if (this.checkoutFormGroup.invalid) {
