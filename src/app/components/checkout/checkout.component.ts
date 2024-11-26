@@ -10,6 +10,11 @@ import { Country } from '../../common/country';
 import { Province } from '../../common/province';
 import { CustomFormValidators } from '../../common/custom-form-validators';
 import { CartService } from '../../services/cart.service';
+import { CheckoutService } from '../../services/checkout.service';
+import { Router } from '@angular/router';
+import { Orders } from '../../common/orders';
+import { OrderItem } from '../../common/order-item';
+import { Purchase } from '../../common/purchase';
 
 @Component({
   selector: 'app-checkout',
@@ -34,7 +39,9 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private formService: FormService,
-    private cartService: CartService
+    private cartService: CartService,
+    private checkoutService: CheckoutService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -279,20 +286,91 @@ export class CheckoutComponent implements OnInit {
     });
   }
   reviewCartDetails() {
-
     this.cartService.totalQuantity.subscribe(
-      totalQuantity => this.totalQuantity = totalQuantity
+      (totalQuantity) => (this.totalQuantity = totalQuantity)
     );
     this.cartService.totalPrice.subscribe(
-      totalPrice => this.totalPrice = totalPrice
+      (totalPrice) => (this.totalPrice = totalPrice)
     );
   }
   onSubmit() {
     if (this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
+      return;
     }
-    console.log(this.checkoutFormGroup.get('shippingAddress')?.value);
-    console.log(this.checkoutFormGroup.get('billingAddress')?.value);
-    console.log(this.checkoutFormGroup.get('customer')?.value);
+
+    // set up order
+    let orders = new Orders();
+    orders.totalPrice = this.totalPrice;
+    orders.totalQuantity = this.totalQuantity;
+
+    // get cart items
+    const cartItems = this.cartService.cartItems;
+
+    // create orderItems from cartItem
+    let orderItems: OrderItem[] = cartItems.map(
+      (tempCartItem) => new OrderItem(tempCartItem)
+    );
+
+    // set up purchase
+    let purchase = new Purchase();
+
+    // populate purchase - customer
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+
+    // populate purchase - shipping address
+    purchase.shippingAddress =
+      this.checkoutFormGroup.controls['shippingAddress'].value;
+    const shippingProvince: Province = JSON.parse(
+      JSON.stringify(purchase.shippingAddress.province)
+    );
+    const shippingCountry: Country = JSON.parse(
+      JSON.stringify(purchase.shippingAddress.country)
+    );
+    purchase.shippingAddress.province = shippingProvince.name;
+    purchase.shippingAddress.country = shippingCountry.name;
+
+    // populate purchase - billing address
+    purchase.billingAddress =
+      this.checkoutFormGroup.controls['billingAddress'].value;
+    const billingAddressProvince: Province = JSON.parse(
+      JSON.stringify(purchase.billingAddress.province)
+    );
+    const billingAddressCountry: Country = JSON.parse(
+      JSON.stringify(purchase.billingAddress.country)
+    );
+    purchase.billingAddress.province = billingAddressProvince.name;
+    purchase.billingAddress.country = billingAddressCountry.name;
+
+    // populate purchase - order and orderItems
+    purchase.orders = orders;
+    purchase.orderItems = orderItems;
+
+    // call REST API via the checkoutService
+    this.checkoutService.placeOrder(purchase).subscribe({
+      next: (response) => {
+        alert(
+          `Your order has been recieved.\nOrder traking number:  ${response.orderTrackingNumber}`
+        );
+
+        // reset cart
+        this.resetCart();
+      },
+      error: (err) => {
+        alert(`There was an error: ${err.message}`);
+      },
+    });
+  }
+  resetCart() {
+    // resret cart data
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+
+    // reset the form data
+    this.checkoutFormGroup.reset();
+
+    // navigate back to the products page
+    this.router.navigateByUrl('/products');
   }
 }
