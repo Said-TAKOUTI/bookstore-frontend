@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 
 @Component({
-  selector: 'app-cart-status',
-  templateUrl: './cart-status.component.html',
-  styleUrl: './cart-status.component.css'
+    selector: 'app-cart-status',
+    templateUrl: './cart-status.component.html',
+    styleUrl: './cart-status.component.css',
+    standalone: false
 })
 export class CartStatusComponent implements OnInit {
 

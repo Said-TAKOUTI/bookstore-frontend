@@ -17,9 +17,10 @@ import { OrderItem } from '../../common/order-item';
 import { Purchase } from '../../common/purchase';
 
 @Component({
-  selector: 'app-checkout',
-  templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.css',
+    selector: 'app-checkout',
+    templateUrl: './checkout.component.html',
+    styleUrl: './checkout.component.css',
+    standalone: false
 })
 export class CheckoutComponent implements OnInit {
   checkoutFormGroup!: FormGroup;
