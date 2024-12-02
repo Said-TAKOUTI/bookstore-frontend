@@ -3,19 +3,17 @@ import { CartItem } from '../common/cart-item';
 import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
-
   cartItems: CartItem[] = [];
 
   totalPrice: Subject<number> = new BehaviorSubject<number>(0);
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
-  constructor() { }
+  constructor() {}
 
   addToCart(theCartItem: CartItem) {
-
     // Try to find the item in the cart based on item id
     let existingCartItem: CartItem | undefined = this.cartItems.find(
       (tempCartItem) => tempCartItem.id === theCartItem.id
@@ -34,7 +32,6 @@ export class CartService {
   }
 
   computeCartTotals() {
-
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
 
@@ -49,19 +46,12 @@ export class CartService {
 
     // compute cart total price and total quantity
     this.logCartData(totalPriceValue, totalQuantityValue);
-
   }
 
   logCartData(totalPriceValue: number, totalQuantityValue: number) {
-
-    console.log('Contents of the cart');
     for (let tempCartItem of this.cartItems) {
       const subTotalPrice = tempCartItem.quantity * tempCartItem.unitPrice;
-      console.log(`name: ${tempCartItem.name}, quantity=${tempCartItem.quantity}, unitPrice=${tempCartItem.unitPrice}, subTotalPrice=${subTotalPrice}`);
     }
-
-    console.log(`totalPrice: ${totalPriceValue.toFixed(2)}, totalQuantity: ${totalQuantityValue}`);
-    console.log('----');
   }
   decrementQuantity(theCartItem: CartItem) {
     theCartItem.quantity--;
@@ -74,10 +64,10 @@ export class CartService {
   }
 
   remove(theCartItem: CartItem) {
-
     //get index item in the array
     const itemIndex = this.cartItems.findIndex(
-      tempCartItem => tempCartItem.id == theCartItem.id);
+      (tempCartItem) => tempCartItem.id == theCartItem.id
+    );
 
     //if found : remove the item from the array at the given index
     if (itemIndex > -1) {
