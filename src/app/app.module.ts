@@ -22,6 +22,7 @@ import { ProductService } from './services/product.service';
 import { MemberspageComponent } from './components/memberspage/memberspage.component';
 
 const oktaConfig = myAppConfig.oidc;
+
 const oktaAuth = new OktaAuth(oktaConfig);
 
 @NgModule({
@@ -48,8 +49,7 @@ const oktaAuth = new OktaAuth(oktaConfig);
   providers: [
     provideHttpClient(),
     ProductService,
-    { provide: OKTA_CONFIG, useValue: { oktaAuth } },
-  ],
+    { provide: OKTA_CONFIG, useValue: { oktaAuth }}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

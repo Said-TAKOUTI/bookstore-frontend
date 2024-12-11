@@ -41,7 +41,7 @@ export class CartDetailsComponent implements OnInit {
     this.cartService.computeCartTotals();
   }
   getSubtotal(item: CartItem): number {
-    return item.quantity * item.unitPrice;
+    return item.quantity * item.unitPrice!;
   }
 
   incrementQuantity(theCartItem: CartItem) {
