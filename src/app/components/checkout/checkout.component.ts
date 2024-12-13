@@ -12,15 +12,15 @@ import { CustomFormValidators } from '../../common/custom-form-validators';
 import { CartService } from '../../services/cart.service';
 import { CheckoutService } from '../../services/checkout.service';
 import { Router } from '@angular/router';
-import { Orders } from '../../common/orders';
 import { OrderItem } from '../../common/order-item';
 import { Purchase } from '../../common/purchase';
+import { Order } from '../../common/order';
 
 @Component({
-    selector: 'app-checkout',
-    templateUrl: './checkout.component.html',
-    styleUrl: './checkout.component.css',
-    standalone: false
+  selector: 'app-checkout',
+  templateUrl: './checkout.component.html',
+  styleUrl: './checkout.component.css',
+  standalone: false,
 })
 export class CheckoutComponent implements OnInit {
   checkoutFormGroup!: FormGroup;
@@ -37,6 +37,7 @@ export class CheckoutComponent implements OnInit {
   shippingAddessProvinces: Province[] = [];
   billingAddessProvinces: Province[] = [];
 
+  storage:Storage = sessionStorage;
   constructor(
     private formBuilder: FormBuilder,
     private formService: FormService,
@@ -46,6 +47,8 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [
@@ -58,7 +61,7 @@ export class CheckoutComponent implements OnInit {
           Validators.minLength(2),
           CustomFormValidators.notOnlyWhiteSpace,
         ]),
-        email: new FormControl('', [
+        email: new FormControl(theEmail, [
           Validators.required,
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}'),
         ]),
@@ -301,10 +304,7 @@ export class CheckoutComponent implements OnInit {
     }
 
     // set up order
-    let orders = new Orders();
-    orders.totalPrice = this.totalPrice;
-    orders.totalQuantity = this.totalQuantity;
-
+    let orders = new Order(this.totalQuantity, this.totalPrice);
     // get cart items
     const cartItems = this.cartService.cartItems;
 
