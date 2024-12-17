@@ -11,8 +11,8 @@ import { environment } from '../../environments/environment.development';
 })
 export class FormService {
 
-  private countriesUrl = environment.bookstore + "/countries";
-  private provincesUrl = environment.bookstore + "/provinces";
+  private countriesUrl = environment.bookstoreApiUrl + "/countries";
+  private provincesUrl = environment.bookstoreApiUrl + "/provinces";
 
   constructor(private httpClient: HttpClient) { }
 

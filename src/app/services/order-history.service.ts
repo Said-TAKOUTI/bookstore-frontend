@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment.development';
 })
 export class OrderHistoryService {
 
-  private orderUrl = environment.bookstore + '/orders';
+  private orderUrl = environment.bookstoreApiUrl + '/orders';
 
   constructor(private httpClient: HttpClient) { }
 

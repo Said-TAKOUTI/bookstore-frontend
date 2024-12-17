@@ -25,7 +25,7 @@ export class AuthInterceptorService implements HttpInterceptor {
 
   private async handleAccess(request: HttpRequest<any>, next: HttpHandler): Promise<HttpEvent<any>> {
 
-    const theEndpoint = environment.bookstore + '/orders';
+    const theEndpoint = environment.bookstoreApiUrl + '/orders';
     // Only add an access token for secured endpoints
     const securedEndpoints = [theEndpoint];
 

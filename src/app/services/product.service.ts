@@ -11,8 +11,8 @@ import { environment } from '../../environments/environment.development';
 })
 export class ProductService {
 
-  private baseUrl = environment.bookstore + "/products";
-  private categoryUrl = environment.bookstore + "/product-category"
+  private baseUrl = environment.bookstoreApiUrl + "/products";
+  private categoryUrl = environment.bookstoreApiUrl + "/product-category"
   constructor(private httpClient: HttpClient) { }
 
 

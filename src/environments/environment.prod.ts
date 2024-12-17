@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    bookstore: 'https://localhost:8080/api',
+    bookstoreApiUrl: 'https://localhost:8080/api',
 };
